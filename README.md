@@ -122,7 +122,7 @@ ADMIN_EMAIL=pcbuilderassist@gmail.com
 
 ### Access Application
 
-- **Frontend**: http://localhost:3002 (Frontend runs on port 3002 to avoid conflicts with MySQL on port 3000. Can be changed in `.env` if needed.)
+- **Frontend**: http://localhost:3002 (Frontend runs on port 3002 to avoid conflicts with other local services. Can be changed in .env if needed.)
 - **Backend API**: http://localhost:5000/api
 - **Admin Login**: `pcbuilderassist@gmail.com` (Password: Ask admin for access)
 
