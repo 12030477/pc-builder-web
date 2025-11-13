@@ -289,6 +289,22 @@ const response = await axios.get('http://localhost:5000/api/builds/search', {
 });
 ```
 
+## 🚀 Deployment
+
+This project can be deployed to various hosting platforms:
+
+- **Frontend**: Deploy to [Vercel](https://vercel.com), [Netlify](https://netlify.com), or [GitHub Pages](https://pages.github.com)
+- **Backend**: Deploy to [Railway](https://railway.app), [Render](https://render.com), or [Fly.io](https://fly.io)
+- **Database**: Use [PlanetScale](https://planetscale.com) (free MySQL), Railway, or Render
+
+**📖 See [DEPLOYMENT.md](DEPLOYMENT.md) for complete deployment instructions.**
+
+Quick deployment steps:
+1. Deploy database to PlanetScale/Railway and import `pc_builder_db.sql`
+2. Deploy backend to Railway/Render with environment variables
+3. Deploy frontend to Vercel/Netlify
+4. Update frontend API URL and backend CORS settings
+
 ## 📞 Support
 
 For support or questions, please contact us at **pcbuilderassist@gmail.com** or create an issue in the repository.
