@@ -30,7 +30,7 @@ const Contact = () => {
 
       const result = await response.json()
 
-      if (result.success) {
+      if (response.ok && (result.status === 'success' || result.success)) {
         toast.success('Thank you for your message! We will get back to you within 24-48 hours.', { id: 'contact-success', duration: 3000 })
         reset()
       } else {
@@ -77,11 +77,11 @@ const Contact = () => {
               <div>
                 <p className="text-white font-semibold mb-2">Email:</p>
                 <a 
-                  href="mailto:support@pcpartpicker.com" 
+                  href="mailto:pcbuilderassist@gmail.com" 
                   className="text-blue-400 hover:text-blue-300 transition-colors duration-200 flex items-center"
                 >
                   <Mail size={16} className="mr-2" />
-                  support@pcpartpicker.com
+                  pcbuilderassist@gmail.com
                 </a>
               </div>
 

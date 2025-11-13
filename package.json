@@ -1,7 +1,7 @@
 {
   "name": "pc-builder-react",
   "version": "1.0.0",
-  "description": "PC Part Picker - React.js version with all original functionality",
+  "description": "PC Builder - React.js version with all original functionality",
   "main": "index.js",
   "homepage": "https://yourusername.github.io/pcbuilder",
   "scripts": {

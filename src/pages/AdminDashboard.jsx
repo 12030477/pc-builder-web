@@ -19,7 +19,7 @@ import api from '../utils/api'
 import toast from 'react-hot-toast'
 
 const AdminDashboard = () => {
-  const [activeTab, setActiveTab] = useState('components')
+  const [activeTab, setActiveTab] = useState('users')
   const [stats, setStats] = useState({
     users: 0,
     components: 0,
@@ -47,8 +47,12 @@ const AdminDashboard = () => {
   const [showEditBuild, setShowEditBuild] = useState(false)
   const [showDeleteBuild, setShowDeleteBuild] = useState(false)
   const [showReplyModal, setShowReplyModal] = useState(false)
+  const [showDeleteComment, setShowDeleteComment] = useState(false)
+  const [showDeleteReset, setShowDeleteReset] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
   const [replyMessage, setReplyMessage] = useState('')
+  const [deleteCommentId, setDeleteCommentId] = useState(null)
+  const [deleteResetToken, setDeleteResetToken] = useState(null)
 
   // Form states
   const [componentForm, setComponentForm] = useState({
@@ -360,12 +364,14 @@ const AdminDashboard = () => {
     }
   }
 
-  const handleDeleteComment = async (messageId) => {
-    if (!window.confirm('Are you sure you want to delete this message?')) return
+  const handleDeleteComment = async () => {
+    if (!deleteCommentId) return
     try {
-      const response = await api.delete(`/admin/contact-messages/${messageId}`)
+      const response = await api.delete(`/admin/contact-messages/${deleteCommentId}`)
       if (response.data.status === 'success') {
         toast.success('Message deleted successfully', { id: 'admin-action', duration: 1500 })
+        setShowDeleteComment(false)
+        setDeleteCommentId(null)
         fetchDashboardData()
       }
     } catch (error) {
@@ -373,12 +379,14 @@ const AdminDashboard = () => {
     }
   }
 
-  const handleDeleteReset = async (token) => {
-    if (!window.confirm('Are you sure you want to delete this password reset request?')) return
+  const handleDeleteReset = async () => {
+    if (!deleteResetToken) return
     try {
-      const response = await api.delete(`/admin/password-resets/${token}`)
+      const response = await api.delete(`/admin/password-resets/${deleteResetToken}`)
       if (response.data.status === 'success') {
         toast.success('Password reset request deleted successfully', { id: 'admin-action', duration: 1500 })
+        setShowDeleteReset(false)
+        setDeleteResetToken(null)
         fetchDashboardData()
       }
     } catch (error) {
@@ -473,9 +481,9 @@ const AdminDashboard = () => {
   )
 
   const tabs = [
+    { id: 'users', label: 'Users', icon: <Users size={20} /> },
     { id: 'components', label: 'Components', icon: <Package size={20} /> },
     { id: 'builds', label: 'Builds', icon: <Wrench size={20} /> },
-    { id: 'users', label: 'Users', icon: <Users size={20} /> },
     { id: 'comments', label: 'Comments', icon: <MessageSquare size={20} /> },
     { id: 'resets', label: 'Password Resets', icon: <Key size={20} /> }
   ]
@@ -752,7 +760,10 @@ const AdminDashboard = () => {
                           Reply
                         </button>
                         <button
-                          onClick={() => handleDeleteComment(comment.id)}
+                          onClick={() => {
+                            setDeleteCommentId(comment.id)
+                            setShowDeleteComment(true)
+                          }}
                           className="btn btn-danger"
                         >
                           <Trash2 size={16} />
@@ -779,7 +790,10 @@ const AdminDashboard = () => {
                         Expires: {new Date(reset.expires_at).toLocaleString()}
                       </div>
                       <button
-                        onClick={() => handleDeleteReset(reset.token)}
+                        onClick={() => {
+                          setDeleteResetToken(reset.token)
+                          setShowDeleteReset(true)
+                        }}
                         className="btn btn-danger"
                       >
                         <Trash2 size={16} className="mr-1" />
@@ -1490,6 +1504,64 @@ const AdminDashboard = () => {
               </button>
             </div>
           </form>
+        </Modal>
+      )}
+
+      {/* Delete Comment Modal */}
+      {showDeleteComment && deleteCommentId && (
+        <Modal
+          title="Delete Message"
+          onClose={() => {
+            setShowDeleteComment(false)
+            setDeleteCommentId(null)
+          }}
+        >
+          <p className="mb-4">
+            Are you sure you want to delete this message? This action cannot be undone.
+          </p>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => {
+                setShowDeleteComment(false)
+                setDeleteCommentId(null)
+              }}
+              className="btn btn-secondary"
+            >
+              Cancel
+            </button>
+            <button onClick={handleDeleteComment} className="btn btn-danger">
+              Delete
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Delete Reset Modal */}
+      {showDeleteReset && deleteResetToken && (
+        <Modal
+          title="Delete Password Reset Request"
+          onClose={() => {
+            setShowDeleteReset(false)
+            setDeleteResetToken(null)
+          }}
+        >
+          <p className="mb-4">
+            Are you sure you want to delete this password reset request? This action cannot be undone.
+          </p>
+          <div className="flex gap-2 justify-end">
+            <button
+              onClick={() => {
+                setShowDeleteReset(false)
+                setDeleteResetToken(null)
+              }}
+              className="btn btn-secondary"
+            >
+              Cancel
+            </button>
+            <button onClick={handleDeleteReset} className="btn btn-danger">
+              Delete
+            </button>
+          </div>
         </Modal>
       )}
     </div>

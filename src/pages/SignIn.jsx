@@ -52,13 +52,12 @@ const SignIn = () => {
       
       if (result.success) {
         toast.success('Welcome back!', { id: 'login-success', duration: 2000 })
-        // Check if there's a guest build to restore
+        // After successful login, check if there's a guest build to restore
         const guestBuild = localStorage.getItem('pcbuilder_guest_build')
         if (guestBuild) {
           // Redirect to system builder to restore the guest build
           navigate('/system-builder', { replace: true })
         } else {
-          // Navigate to the intended destination or home
           navigate(from, { replace: true })
         }
       } else {
@@ -217,7 +216,7 @@ const SignIn = () => {
                 <div className="w-full border-t border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-gray-800 text-gray-400">New to PC Part Picker?</span>
+                <span className="px-2 bg-gray-800 text-gray-400">New to PC Builder?</span>
               </div>
             </div>
 

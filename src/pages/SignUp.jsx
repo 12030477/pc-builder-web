@@ -41,14 +41,13 @@ const SignUp = () => {
         
         if (loginResult.success) {
           toast.success('Welcome! You are now logged in.', { id: 'register-success', duration: 2000 })
-          // Check if there's a guest build to restore
+          // After successful registration/login, check if there's a guest build to restore
           const guestBuild = localStorage.getItem('pcbuilder_guest_build')
           if (guestBuild) {
             // Redirect to system builder to restore the guest build
             navigate('/system-builder', { replace: true })
           } else {
-            // Navigate to home page after successful registration
-            navigate('/', { replace: true })
+            navigate('/')
           }
         } else {
           // If auto-login fails, redirect to signin with helpful message

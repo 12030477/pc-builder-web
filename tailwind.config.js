@@ -5,6 +5,15 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
+    screens: {
+      'xs': '0px',
+      'sm': '640px', // Mobile ends, Tablet starts
+      'tablet': '640px', // Tablet breakpoint (alias for sm)
+      'md': '1071px', // Tablet ends, Desktop starts (>1070px)
+      'lg': '1280px',
+      'xl': '1536px',
+      '2xl': '1920px',
+    },
     extend: {
       colors: {
         primary: {

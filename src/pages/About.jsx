@@ -18,7 +18,7 @@ const About = () => {
         {/* Hero Section */}
         <div className="text-center mb-20">
           <h1 className="text-5xl md:text-6xl font-bold text-gradient mb-6">
-            About PC Part Picker
+            About PC Builder
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto opacity-90">
             Empowering PC enthusiasts with the ultimate tools to build their dream computers
@@ -46,7 +46,7 @@ const About = () => {
               What We Do
             </h2>
             <p className="text-lg text-gray-300 mb-6 leading-relaxed">
-              PC Part Picker is your ultimate destination for building custom computers. Whether you're a seasoned builder 
+              PC Builder is your ultimate destination for building custom computers. Whether you're a seasoned builder 
               or just starting your PC journey, we provide comprehensive tools and resources to help you create the perfect system.
             </p>
             <p className="text-lg text-gray-300 leading-relaxed">
@@ -143,7 +143,7 @@ const About = () => {
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
             Whether you're building your first PC or your hundredth, we're here to support your journey. 
-            Join thousands of builders who trust PC Part Picker for their computer building needs.
+            Join thousands of builders who trust PC Builder for their computer building needs.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 

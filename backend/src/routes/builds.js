@@ -159,9 +159,6 @@ router.get('/my', authenticateToken, async (req, res) => {
     // Get query parameters for filtering
     const { minPrice, maxPrice, cpuBrand, budget } = req.query
     
-    // Debug: Log received filters
-    console.log('[GET /builds/my] Filters received:', { minPrice, maxPrice, cpuBrand, budget, userId: req.user.user_id })
-    
     // Build SQL query with CPU manufacturer info (similar to /search endpoint)
     let sql = `
       SELECT b.*, u.name as user_name,
@@ -186,7 +183,6 @@ router.get('/my', authenticateToken, async (req, res) => {
       if (!isNaN(minPriceNum) && minPriceNum > 0) {
         sql += ' AND b.total_price >= ?'
         params.push(minPriceNum)
-        console.log('[GET /builds/my] Applied minPrice filter:', minPriceNum)
       }
     }
     
@@ -195,7 +191,6 @@ router.get('/my', authenticateToken, async (req, res) => {
       if (!isNaN(maxPriceNum) && maxPriceNum > 0) {
         sql += ' AND b.total_price <= ?'
         params.push(maxPriceNum)
-        console.log('[GET /builds/my] Applied maxPrice filter:', maxPriceNum)
       }
     }
     
@@ -203,7 +198,6 @@ router.get('/my', authenticateToken, async (req, res) => {
     if (budget === 'true' || budget === true) {
       if (!maxPrice || maxPrice === '' || maxPrice === '0') {
         sql += ' AND b.total_price <= 1000'
-        console.log('[GET /builds/my] Applied budget filter (<= 1000)')
       }
     }
     
@@ -212,22 +206,15 @@ router.get('/my', authenticateToken, async (req, res) => {
       const cpuBrandLower = cpuBrand.toLowerCase()
       if (cpuBrandLower === 'amd') {
         sql += ' AND EXISTS (SELECT 1 FROM buildcomponent bc JOIN component c ON bc.component_id = c.component_id JOIN category cat ON c.category_id = cat.category_id WHERE bc.build_id = b.build_id AND cat.category_id = 1 AND c.manufacturer_id = 2)'
-        console.log('[GET /builds/my] Applied CPU brand filter: AMD')
       } else if (cpuBrandLower === 'intel') {
         sql += ' AND EXISTS (SELECT 1 FROM buildcomponent bc JOIN component c ON bc.component_id = c.component_id JOIN category cat ON c.category_id = cat.category_id WHERE bc.build_id = b.build_id AND cat.category_id = 1 AND c.manufacturer_id = 1)'
-        console.log('[GET /builds/my] Applied CPU brand filter: Intel')
       }
     }
     
     // Add sorting
     sql += ' ORDER BY b.updated_at DESC'
     
-    console.log('[GET /builds/my] SQL query:', sql)
-    console.log('[GET /builds/my] SQL params:', params)
-    
     const [builds] = await pool.execute(sql, params)
-    
-    console.log('[GET /builds/my] Found', builds.length, 'builds')
 
     res.json({
       status: 'success',

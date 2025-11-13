@@ -1,20 +1,35 @@
-const mysql = require('mysql2')
+const mysql = require('mysql2/promise')
 
-const connection = mysql.createConnection({
-  host: process.env.DB_HOST || process.env.MYSQLHOST,
-  user: process.env.DB_USER || process.env.MYSQLUSER,
-  password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD,
-  database: process.env.DB_NAME || process.env.MYSQLDATABASE,
-  port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
-})
+const dbConfig = {
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  port: parseInt(process.env.DB_PORT) || 3306,
+  database: process.env.DB_NAME || 'pc_builder_db',
+  charset: 'utf8mb4',
+  connectionLimit: 10,
+  waitForConnections: true,
+  queueLimit: 0
+}
 
-connection.connect(err => {
-  if (err) {
-    console.error('❌ Database connection failed:', err.message)
-  } else {
-    console.log('✅ Connected to MySQL database successfully')
+// Create connection pool
+const pool = mysql.createPool(dbConfig)
+
+// Test database connection
+const testConnection = async () => {
+  try {
+    const connection = await pool.getConnection()
+    console.log('✅ Database connected successfully')
+    connection.release()
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message)
+    console.error('⚠️  Please make sure MySQL is running and database is set up')
+    console.error('📖 See DATABASE_SETUP.md for setup instructions')
+    // Don't exit - allow server to start but API calls will fail gracefully
   }
-})
+}
 
-// Export connection with promise support for async/await usage in routes
-module.exports = connection.promise()
+// Initialize database connection
+testConnection()
+
+module.exports = pool

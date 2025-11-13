@@ -2,6 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Navbar from './components/Navbar'
+import ScrollToTop from './components/ScrollToTop'
 import Home from './pages/Home'
 import About from './pages/About'
 import Services from './pages/Services'
@@ -21,6 +22,7 @@ function App() {
   return (
     <Router>
           <div className="min-h-screen bg-black">
+            <ScrollToTop />
             <Navbar />
             <main className="pt-16">
               <Routes>

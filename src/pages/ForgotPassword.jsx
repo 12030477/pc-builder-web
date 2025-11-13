@@ -22,7 +22,7 @@ const ForgotPassword = () => {
 
       const result = await response.json()
 
-      if (result.success) {
+      if (response.ok && (result.status === 'success' || result.success)) {
         setEmailSent(true)
         toast.success('Password reset email sent! Check your inbox.', { id: 'password-reset-success', duration: 3000 })
       } else {

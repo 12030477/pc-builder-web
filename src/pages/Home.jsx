@@ -4,7 +4,6 @@ import { useAuth } from '../context/AuthContext'
 
 const Home = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
-  const { isAuthenticated, isAdmin } = useAuth()
 
   const images = [
     'PC (1).jpg',
@@ -55,17 +54,6 @@ const Home = () => {
           Start building your dream PC today!
         </div>
       </div>
-
-      {/* Admin Dashboard Button */}
-      {isAuthenticated && isAdmin && (
-        <Link
-          to="/admin"
-          className="fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-lg font-semibold shadow-lg hover:bg-blue-600 transition-colors duration-200 z-50 max-w-[95vw] whitespace-nowrap"
-          title="Go to Admin Dashboard"
-        >
-          ⚡ Admin Dashboard
-        </Link>
-      )}
 
       {/* Features Section */}
       <div className="container mt-20 mb-16">

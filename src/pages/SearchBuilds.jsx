@@ -356,12 +356,8 @@ const SearchBuilds = () => {
       const components = response.data.components || []
 
       // Format build details as text
-      let shareText = `🖥️ PC Build: ${build.name}\n`
-      shareText += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n`
-      shareText += `👤 Creator: ${build.user_name}\n`
-      shareText += `💰 Total Price: $${parseFloat(build.total_price).toLocaleString()}\n`
-      shareText += `📅 Created: ${new Date(build.created_at).toLocaleDateString()}\n`
-      shareText += `🔄 Updated: ${new Date(build.updated_at).toLocaleDateString()}\n\n`
+      let shareText = `👤 Creator: ${build.user_name}\n`
+      shareText += `💰 Total Price: $${parseFloat(build.total_price).toLocaleString()}\n\n`
       
       // Group components by category
       const componentsByCategory = {}
@@ -392,7 +388,6 @@ const SearchBuilds = () => {
       })
 
       shareText += `\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`
-      shareText += `🌐 View online: ${window.location.origin}/build/${buildId}\n`
       shareText += `\nShared from PC Builder`
 
       // Try to use Web Share API if available (mobile)
@@ -456,11 +451,11 @@ const SearchBuilds = () => {
       <div className="container py-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-gradient mb-4">
+          <div className="text-center mb-6 md:mb-8 px-2">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-gradient mb-3 md:mb-4">
               Search Builds
             </h1>
-            <p className="text-gray-400 text-lg">
+            <p className="text-gray-400 text-sm md:text-base lg:text-lg px-2">
               {viewMode === 'public' 
                 ? 'Discover amazing PC builds from our community'
                 : 'Manage your personal PC builds'
@@ -470,61 +465,60 @@ const SearchBuilds = () => {
 
           {/* View Mode Toggle */}
           {isAuthenticated && (
-            <div className="flex justify-center gap-4 mb-6">
+            <div className="flex justify-center gap-2 md:gap-4 mb-4 md:mb-6 px-2">
               <button
                 onClick={() => {
                   setViewMode('public')
                   setSearchParams({ view: 'public' })
                 }}
-                className={`px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
+                className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors duration-200 text-sm md:text-base flex items-center ${
                   viewMode === 'public'
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
-                <Globe size={20} className="inline mr-2" />
-                Community Builds
+                <Globe size={16} className="md:w-5 md:h-5 mr-1.5 md:mr-2" />
+                <span className="whitespace-nowrap">Community</span>
               </button>
               <button
                 onClick={() => {
                   setViewMode('private')
                   setSearchParams({ view: 'private' })
                 }}
-                className={`px-6 py-3 rounded-lg font-semibold transition-colors duration-200 ${
+                className={`px-4 md:px-6 py-2 md:py-3 rounded-lg font-semibold transition-colors duration-200 text-sm md:text-base flex items-center ${
                   viewMode === 'private'
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
                 }`}
               >
-                <Lock size={20} className="inline mr-2" />
-                My Builds
+                <Lock size={16} className="md:w-5 md:h-5 mr-1.5 md:mr-2" />
+                <span className="whitespace-nowrap">My Builds</span>
               </button>
             </div>
           )}
 
           {/* Search and Filter Bar */}
-          <div className="card p-6 mb-8">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-                  <input
-                    type="text"
-                    placeholder="Search builds..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="input pl-10"
-                  />
-                </div>
+          <div className="card p-4 md:p-6 mb-6 md:mb-8">
+            {/* Mobile: Stacked layout */}
+            <div className="flex flex-col md:hidden gap-3">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+                <input
+                  type="text"
+                  placeholder="Search builds..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="input pl-9 text-sm w-full"
+                />
               </div>
               
-              <div className="flex gap-4">
+              <div className="flex flex-col sm:flex-row gap-2">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className={`btn ${showFilters || filters.minPrice || filters.maxPrice || filters.cpuBrand || filters.budget ? 'btn-primary' : 'btn-secondary'} flex items-center gap-2`}
+                  className={`btn ${showFilters || filters.minPrice || filters.maxPrice || filters.cpuBrand || filters.budget ? 'btn-primary' : 'btn-secondary'} flex items-center justify-center gap-2 text-sm px-3 py-2`}
                 >
-                  <Filter size={18} />
-                  Filters
+                  <Filter size={16} />
+                  <span>Filters</span>
                   {((filters.minPrice || filters.maxPrice) || filters.cpuBrand || filters.budget) && (
                     <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
                       {((filters.minPrice || filters.maxPrice) ? 1 : 0) + (filters.cpuBrand ? 1 : 0) + (filters.budget ? 1 : 0)}
@@ -534,7 +528,7 @@ const SearchBuilds = () => {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="input"
+                  className="input text-sm"
                 >
                   <option value="updated">Last Updated</option>
                   <option value="popular">Most Popular</option>
@@ -544,40 +538,80 @@ const SearchBuilds = () => {
               </div>
             </div>
 
+            {/* Tablet/Desktop: All on one line */}
+            <div className="hidden md:flex items-stretch gap-2 lg:gap-3">
+              <div className="flex-[2] relative min-w-[250px] lg:min-w-[300px]">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10 pointer-events-none" size={20} />
+                <input
+                  type="text"
+                  placeholder="Search builds..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="input pl-10 lg:pl-11 pr-4 py-3 text-base lg:text-lg w-full h-full"
+                  style={{ minHeight: '42px' }}
+                />
+              </div>
+              
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className={`btn ${showFilters || filters.minPrice || filters.maxPrice || filters.cpuBrand || filters.budget ? 'btn-primary' : 'btn-secondary'} flex items-center justify-center gap-1.5 lg:gap-2 text-xs lg:text-sm px-3 lg:px-4 py-2 lg:py-2.5 flex-shrink-0 whitespace-nowrap h-auto`}
+              >
+                <Filter size={18} className="lg:w-5 lg:h-5 flex-shrink-0" />
+                <span className="hidden xl:inline">Filters</span>
+                {((filters.minPrice || filters.maxPrice) || filters.cpuBrand || filters.budget) && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 flex-shrink-0 ml-0.5">
+                    {((filters.minPrice || filters.maxPrice) ? 1 : 0) + (filters.cpuBrand ? 1 : 0) + (filters.budget ? 1 : 0)}
+                  </span>
+                )}
+              </button>
+              
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="input text-xs lg:text-sm px-3 lg:px-4 py-2 lg:py-2.5 flex-shrink-0 w-[140px] lg:w-[160px] h-auto overflow-hidden text-ellipsis"
+                style={{ minHeight: '42px' }}
+              >
+                <option value="updated">Last Updated</option>
+                <option value="popular">Most Popular</option>
+                <option value="price">Price (Low to High)</option>
+                <option value="name">Name (A-Z)</option>
+              </select>
+            </div>
+
             {/* Filter Panel */}
             {showFilters && (
               <div className="mt-4 pt-4 border-t border-gray-700">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
                   {/* Price Range */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Min Price ($)</label>
+                    <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Min Price ($)</label>
                     <input
                       type="number"
                       placeholder="Min"
                       value={filters.minPrice}
                       onChange={(e) => setFilters({ ...filters, minPrice: e.target.value })}
-                      className="input"
+                      className="input text-sm md:text-base"
                       min="0"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-2">Max Price ($)</label>
+                    <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Max Price ($)</label>
                     <input
                       type="number"
                       placeholder="Max"
                       value={filters.maxPrice}
                       onChange={(e) => setFilters({ ...filters, maxPrice: e.target.value })}
-                      className="input"
+                      className="input text-sm md:text-base"
                       min="0"
                     />
                   </div>
                   {/* CPU Brand */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">CPU Brand</label>
+                    <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">CPU Brand</label>
                 <select
                       value={filters.cpuBrand}
                       onChange={(e) => setFilters({ ...filters, cpuBrand: e.target.value })}
-                  className="input"
+                  className="input text-sm md:text-base"
                 >
                       <option value="">All CPUs</option>
                       <option value="intel">Intel</option>
@@ -586,7 +620,7 @@ const SearchBuilds = () => {
               </div>
                   {/* Budget PC */}
                   <div>
-                    <label className="block text-sm font-medium mb-2">Quick Filter</label>
+                    <label className="block text-xs md:text-sm font-medium mb-1 md:mb-2">Quick Filter</label>
                     <button
                       onClick={() => {
                         if (filters.budget) {
@@ -597,7 +631,7 @@ const SearchBuilds = () => {
                           setFilters({ ...filters, budget: true, minPrice: '', maxPrice: '' })
                         }
                       }}
-                      className={`w-full btn ${filters.budget ? 'btn-primary' : 'btn-secondary'}`}
+                      className={`w-full btn ${filters.budget ? 'btn-primary' : 'btn-secondary'} text-xs md:text-sm px-3 py-2`}
                     >
                       {filters.budget ? '✓ Budget PC (<$1000)' : 'Budget PC (<$1000)'}
                     </button>
@@ -605,7 +639,7 @@ const SearchBuilds = () => {
                 </div>
                 {/* Clear Filters */}
                 {(filters.minPrice || filters.maxPrice || filters.cpuBrand || filters.budget) && (
-                  <div className="mt-4 flex justify-end">
+                  <div className="mt-3 md:mt-4 flex justify-end">
                     <button
                       onClick={() => {
                         const clearedFilters = { minPrice: '', maxPrice: '', cpuBrand: '', budget: false }
@@ -615,10 +649,10 @@ const SearchBuilds = () => {
                         // The effect will update URL params (and preserve view param)
                         toast.success('Filters cleared', { id: 'filter-action', duration: 1200 })
                       }}
-                      className="btn btn-secondary flex items-center gap-2"
+                      className="btn btn-secondary flex items-center gap-2 text-xs md:text-sm px-3 py-2"
                     >
-                      <X size={16} />
-                      Clear Filters
+                      <X size={14} className="md:w-4 md:h-4" />
+                      <span>Clear Filters</span>
                     </button>
                   </div>
                 )}
@@ -661,130 +695,134 @@ const SearchBuilds = () => {
                 const isOwnBuild = isAuthenticated && user && build.user_id === user.user_id
 
                 return (
-                  <div key={build.build_id} className={`card p-5 hover:transform hover:scale-[1.02] transition-all duration-300 flex flex-col ${viewMode === 'public' && isOwnBuild ? 'ring-2 ring-blue-500 ring-opacity-70 bg-gray-800/60' : ''}`}>
+                  <div key={build.build_id} className={`card p-4 md:p-5 hover:transform hover:scale-[1.02] transition-all duration-300 flex flex-col ${viewMode === 'public' && isOwnBuild ? 'ring-2 ring-blue-500 ring-opacity-70 bg-gray-800/60' : ''}`}>
                     {/* Header */}
-                    <div className="mb-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="text-lg font-bold text-white truncate flex-1" title={build.name}>{build.name}</h3>
+                    <div className="mb-3 md:mb-4">
+                      <div className="flex items-start justify-between mb-2 md:mb-3 gap-2">
+                        <h3 className="text-lg md:text-xl font-bold text-white break-words flex-1 min-w-0" title={build.name}>{build.name}</h3>
                         {viewMode === 'public' && isOwnBuild && (
-                          <span className="px-2 py-0.5 bg-blue-600/40 text-blue-200 text-xs rounded-full font-semibold flex-shrink-0 border border-blue-500/30 ml-2">
+                          <span className="px-3 md:px-4 py-1.5 md:py-2 bg-blue-600/40 text-blue-200 text-sm md:text-base rounded-full font-semibold flex-shrink-0 border border-blue-500/30">
                             ⭐ Yours
                           </span>
                         )}
                       </div>
-                      <div className="flex items-center gap-2 flex-wrap mb-3">
+                      <div className="flex items-center gap-2 md:gap-3 flex-wrap mb-2 md:mb-3">
                         {build.is_public ? (
-                          <span className="px-2 py-0.5 bg-green-600/20 text-green-400 text-xs rounded-full flex items-center gap-1">
-                            <Globe size={10} />
-                            Public
+                          <span className="px-3 md:px-4 py-1.5 md:py-2 bg-green-600/20 text-green-400 text-sm md:text-base rounded-full flex items-center gap-1.5">
+                            <Globe size={14} className="md:w-5 md:h-5" />
+                            <span>Public</span>
                           </span>
                         ) : (
-                          <span className="px-2 py-0.5 bg-yellow-600/20 text-yellow-400 text-xs rounded-full flex items-center gap-1">
-                            <Lock size={10} />
-                            Private
+                          <span className="px-3 md:px-4 py-1.5 md:py-2 bg-yellow-600/20 text-yellow-400 text-sm md:text-base rounded-full flex items-center gap-1.5">
+                            <Lock size={14} className="md:w-5 md:h-5" />
+                            <span>Private</span>
                           </span>
                         )}
                         {/* Always show like count */}
-                        <span className="px-2 py-0.5 bg-pink-600/20 text-pink-400 text-xs rounded-full flex items-center gap-1">
-                          <Heart size={10} className={likeCount > 0 ? 'fill-pink-400' : ''} />
-                          {likeCount} {likeCount === 1 ? 'like' : 'likes'}
+                        <span className="px-3 md:px-4 py-1.5 md:py-2 bg-pink-600/20 text-pink-400 text-sm md:text-base rounded-full flex items-center gap-1.5">
+                          <Heart size={14} className={`md:w-5 md:h-5 ${likeCount > 0 ? 'fill-pink-400' : ''}`} />
+                          <span>{likeCount} {likeCount === 1 ? 'like' : 'likes'}</span>
                         </span>
                     </div>
                   </div>
                   
                     {/* Build Details - Compact */}
-                    <div className="bg-gray-800/30 rounded-lg p-3 mb-4 space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-xs">Price:</span>
-                        <span className="text-blue-400 font-bold text-lg">${parseFloat(build.total_price).toLocaleString()}</span>
+                    <div className="bg-gray-800/30 rounded-lg p-3 md:p-4 mb-3 md:mb-4 space-y-2.5 md:space-y-3">
+                      <div className="flex justify-between items-center gap-2">
+                        <span className="text-gray-400 text-sm md:text-base font-medium">Price:</span>
+                        <span className="text-blue-400 font-bold text-lg md:text-xl">${parseFloat(build.total_price).toLocaleString()}</span>
                     </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-xs">Creator:</span>
-                        <span className="text-white text-sm font-medium truncate ml-2">{build.user_name}</span>
+                      <div className="flex justify-between items-center gap-2">
+                        <span className="text-gray-400 text-sm md:text-base font-medium">Creator:</span>
+                        <span className="text-white text-sm md:text-base font-medium truncate ml-2 flex-1 text-right">{build.user_name}</span>
                     </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-gray-400 text-xs">Updated:</span>
-                        <span className="text-gray-300 text-xs">{new Date(build.updated_at).toLocaleDateString()}</span>
+                      <div className="flex justify-between items-center gap-2">
+                        <span className="text-gray-400 text-sm md:text-base font-medium">Updated:</span>
+                        <span className="text-gray-300 text-sm md:text-base">{new Date(build.updated_at).toLocaleDateString()}</span>
                     </div>
                   </div>
                   
                     {/* Action Buttons - Single Row */}
                     <div className="mt-auto pt-3 border-t border-gray-700">
-                      {viewMode === 'private' && isOwnedByMe ? (
-                        // My Builds View: All buttons in one row
-                        <div className="flex gap-2 flex-wrap">
+                      {/* Show management buttons if this is the user's own build */}
+                      {isOwnBuild ? (
+                        // My Own Build: Show management buttons (View, Edit, Toggle, Share, Delete) - All on one line, evenly distributed
+                        <div className="grid grid-cols-5 gap-1.5 md:gap-2">
                           <Link
-                            to={`/build/${build.build_id}?from=my-builds&view=private`}
-                            className="btn btn-primary flex-1 flex items-center justify-center text-xs px-3 py-2 min-w-0"
+                            to={`/build/${build.build_id}?from=${viewMode === 'private' ? 'my-builds' : 'community-builds'}&view=${viewMode}`}
+                            className="btn btn-primary flex items-center justify-center text-sm md:text-base px-3 md:px-4 py-2 md:py-2.5 focus:ring-2 focus:ring-blue-500 focus:ring-offset-0 focus:outline-none border-0"
                             title="View build"
                           >
-                            <Eye size={14} className="mr-1" />
-                            View
+                            <Eye size={16} className="md:w-5 md:h-5" />
                           </Link>
                           <Link
                             to={`/system-builder?build_id=${build.build_id}`}
-                            className="btn btn-secondary flex items-center justify-center text-xs px-3 py-2"
+                            className="btn btn-secondary flex items-center justify-center text-sm md:text-base px-3 md:px-4 py-2 md:py-2.5 focus:ring-2 focus:ring-gray-500 focus:ring-offset-0 focus:outline-none border-0"
                             title="Edit build"
                           >
-                            <Edit size={14} />
+                            <Edit size={16} className="md:w-5 md:h-5" />
                           </Link>
                           <button
                             onClick={() => handleToggleVisibility(build.build_id, build.is_public)}
-                            className={`btn ${build.is_public ? 'btn-secondary' : 'btn-primary'} flex items-center justify-center text-xs px-3 py-2`}
+                            className={`btn ${build.is_public ? 'btn-secondary' : 'btn-primary'} flex items-center justify-center text-sm md:text-base px-3 md:px-4 py-2 md:py-2.5 focus:ring-2 focus:ring-offset-0 focus:outline-none border-0 ${build.is_public ? 'focus:ring-gray-500' : 'focus:ring-blue-500'}`}
                             title={build.is_public ? 'Make Private' : 'Make Public'}
                           >
-                            {build.is_public ? <Lock size={14} /> : <Globe size={14} />}
+                            {build.is_public ? <Lock size={16} className="md:w-5 md:h-5" /> : <Globe size={16} className="md:w-5 md:h-5" />}
+                          </button>
+                          <button
+                            onClick={() => handleShare(build.build_id, build.name)}
+                            className="btn btn-secondary flex items-center justify-center text-sm md:text-base px-3 md:px-4 py-2 md:py-2.5 focus:ring-2 focus:ring-gray-500 focus:ring-offset-0 focus:outline-none border-0"
+                            title="Share build"
+                          >
+                            <Share2 size={16} className="md:w-5 md:h-5" />
                           </button>
                           <button
                             onClick={() => setDeleteModal({ show: true, buildId: build.build_id, buildName: build.name })}
-                            className="btn btn-danger flex items-center justify-center text-xs px-3 py-2"
+                            className="btn btn-danger flex items-center justify-center text-sm md:text-base px-3 md:px-4 py-2 md:py-2.5 focus:ring-2 focus:ring-red-500 focus:ring-offset-0 focus:outline-none border-0"
                             title="Delete build"
                           >
-                            <Trash2 size={14} />
+                            <Trash2 size={16} className="md:w-5 md:h-5" />
                           </button>
                         </div>
                       ) : (
-                        // Community Builds View: All buttons in one row
-                        <div className="flex gap-2 flex-wrap">
-                    <Link
-                      to={`/build/${build.build_id}?from=community-builds&view=public`}
-                            className="btn btn-primary flex-1 flex items-center justify-center text-xs px-3 py-2 min-w-0"
+                        // Other User's Build: Show view/interaction buttons (View, Like, Share, Duplicate)
+                        <div className="flex gap-2 md:gap-3 flex-wrap">
+                          <Link
+                            to={`/build/${build.build_id}?from=community-builds&view=public`}
+                            className="btn btn-primary flex items-center justify-center gap-1.5 text-sm md:text-base px-4 md:px-5 py-2.5 md:py-3 min-w-[44px] md:min-w-[50px]"
                             title="View build"
-                    >
-                            <Eye size={14} className="mr-1" />
-                            View
-                    </Link>
+                          >
+                            <Eye size={16} className="md:w-5 md:h-5" />
+                          </Link>
                           {/* Like button - only show for builds that are not owned by current user */}
-                          {!isOwnBuild ? (
-                            <button
-                              onClick={() => {
-                                if (!isAuthenticated) {
-                                  toast.error('Please login to like builds')
-                                  navigate('/signin')
-                                  return
-                                }
-                                handleLike(build.build_id, userLiked)
-                              }}
-                              className={`btn ${userLiked && isAuthenticated ? 'btn-danger' : 'btn-secondary'} flex items-center justify-center text-xs px-3 py-2`}
-                              title={isAuthenticated ? (userLiked ? 'Unlike' : 'Like') : 'Login to like'}
-                            >
-                              <Heart size={14} className={userLiked && isAuthenticated ? 'fill-current' : ''} />
-                            </button>
-                          ) : null}
+                          <button
+                            onClick={() => {
+                              if (!isAuthenticated) {
+                                toast.error('Please login to like builds')
+                                navigate('/signin')
+                                return
+                              }
+                              handleLike(build.build_id, userLiked)
+                            }}
+                            className={`btn ${userLiked && isAuthenticated ? 'btn-danger' : 'btn-secondary'} flex items-center justify-center gap-1.5 text-sm md:text-base px-4 md:px-5 py-2.5 md:py-3 min-w-[44px] md:min-w-[50px]`}
+                            title={isAuthenticated ? (userLiked ? 'Unlike' : 'Like') : 'Login to like'}
+                          >
+                            <Heart size={16} className={`md:w-5 md:h-5 ${userLiked && isAuthenticated ? 'fill-current' : ''}`} />
+                          </button>
                           <button
                             onClick={() => handleShare(build.build_id, build.name)}
-                            className="btn btn-secondary flex items-center justify-center text-xs px-3 py-2"
+                            className="btn btn-secondary flex items-center justify-center gap-1.5 text-sm md:text-base px-4 md:px-5 py-2.5 md:py-3 min-w-[44px] md:min-w-[50px]"
                             title="Share build"
                           >
-                            <Share2 size={14} />
+                            <Share2 size={16} className="md:w-5 md:h-5" />
                           </button>
                           {isAuthenticated && (
                             <button
                               onClick={() => handleDuplicate(build.build_id)}
-                              className="btn btn-secondary flex items-center justify-center text-xs px-3 py-2"
+                              className="btn btn-secondary flex items-center justify-center gap-1.5 text-sm md:text-base px-4 md:px-5 py-2.5 md:py-3 min-w-[44px] md:min-w-[50px]"
                               title="Duplicate build"
                             >
-                              <Copy size={14} />
+                              <Copy size={16} className="md:w-5 md:h-5" />
                             </button>
                           )}
                         </div>
@@ -800,25 +838,50 @@ const SearchBuilds = () => {
 
       {/* Delete Confirmation Modal */}
       {deleteModal.show && (
-        <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
-          <div className="bg-gray-800 rounded-lg max-w-md w-full p-6">
-            <h2 className="text-2xl font-bold text-white mb-4">Delete Build</h2>
-            <p className="text-gray-300 mb-6">
-              Are you sure you want to delete <strong className="text-white">{deleteModal.buildName}</strong>? 
-              This action cannot be undone.
-            </p>
-            <div className="flex gap-4 justify-end">
+        <div 
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-[9999] p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setDeleteModal({ show: false, buildId: null, buildName: '' })
+            }
+          }}
+        >
+          <div 
+            className="bg-gray-800 border border-gray-700 rounded-xl shadow-2xl max-w-md w-full p-6 md:p-8 animate-slide-up"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Icon and Title */}
+            <div className="flex items-start gap-4 mb-4 md:mb-6">
+              <div className="flex-shrink-0 w-12 h-12 md:w-14 md:h-14 rounded-full bg-red-600/20 flex items-center justify-center">
+                <Trash2 className="text-red-400" size={24} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h2 className="text-xl md:text-2xl font-bold text-white mb-2 break-words">
+                  Delete Build?
+                </h2>
+                <p className="text-gray-400 text-sm md:text-base break-words">
+                  Are you sure you want to delete <span className="text-white font-semibold">{deleteModal.buildName}</span>? 
+                </p>
+                <p className="text-red-400 text-xs md:text-sm mt-2 font-medium">
+                  ⚠️ This action cannot be undone.
+                </p>
+              </div>
+            </div>
+            
+            {/* Action Buttons */}
+            <div className="flex flex-col-reverse sm:flex-row gap-3 md:gap-4 justify-end mt-6 md:mt-8">
               <button
                 onClick={() => setDeleteModal({ show: false, buildId: null, buildName: '' })}
-                className="btn btn-secondary"
+                className="btn btn-secondary text-sm md:text-base px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-gray-700"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
-                className="btn btn-danger"
+                className="btn btn-danger text-sm md:text-base px-6 py-3 rounded-lg font-medium transition-all duration-200 hover:bg-red-700 flex items-center justify-center gap-2"
               >
-                Delete
+                <Trash2 size={18} />
+                <span>Delete Build</span>
               </button>
             </div>
           </div>
