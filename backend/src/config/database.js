@@ -1,19 +1,20 @@
-const mysql = require('mysql2/promise')
+const mysql = require('mysql2')
 
-const connectDB = async () => {
-  try {
-    const connection = await mysql.createConnection({
-      host: process.env.DB_HOST,
-      port: process.env.DB_PORT,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
-    })
-    console.log('✅ Database connected successfully!')
-    return connection
-  } catch (error) {
-    console.error('❌ Database connection failed:', error.message)
+const connection = mysql.createConnection({
+  host: process.env.DB_HOST || process.env.MYSQLHOST,
+  user: process.env.DB_USER || process.env.MYSQLUSER,
+  password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD,
+  database: process.env.DB_NAME || process.env.MYSQLDATABASE,
+  port: process.env.DB_PORT || process.env.MYSQLPORT || 3306,
+})
+
+connection.connect(err => {
+  if (err) {
+    console.error('❌ Database connection failed:', err.message)
+  } else {
+    console.log('✅ Connected to MySQL database successfully')
   }
-}
+})
 
-module.exports = { connectDB }
+// Export connection with promise support for async/await usage in routes
+module.exports = connection.promise()
